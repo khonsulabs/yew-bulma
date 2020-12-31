@@ -18,4 +18,4 @@ yew = "0.17"
 pulldown-cmark = "0.7"
 thiserror = "1"
 float-cmp = "0.8"
-chrono = { version = "*", features = ["serde", "js-sys"] }
+chrono = { version = "0.4", features = ["serde", "js-sys"] }
