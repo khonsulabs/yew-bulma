@@ -1,6 +1,6 @@
 [package]
 name = "yew-bulma"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Jonathan Johnson <jon@khonsulabs.com>"]
 edition = "2018"
 description = "Yew components compatible with the Bulma CSS framework"

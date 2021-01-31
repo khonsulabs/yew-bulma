@@ -45,7 +45,7 @@ impl Component for Button {
     fn view(&self) -> Html {
         html! {
             <div class="control">
-                <button class=format!("button {} {}", self.props.css_class, self.is_loading()) disabled=self.props.disabled onclick=self.link.callback(|e: MouseEvent| Message::Action(e))>
+                <button class=format!("button {} {}", self.props.css_class, self.is_loading()) disabled=self.props.disabled onclick=self.link.callback(Message::Action)>
                     { &self.props.label }
                 </button>
             </div>

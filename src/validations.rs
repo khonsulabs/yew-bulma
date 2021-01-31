@@ -95,7 +95,7 @@ where
 }
 
 #[derive(Debug)]
-pub struct Feild<F, V>
+pub struct Field<F, V>
 where
     F: Copy + std::fmt::Debug,
     V: std::fmt::Debug,
@@ -214,16 +214,11 @@ where
         });
         self
     }
-    pub fn with_custom<V: Validator + 'static>(
-        mut self,
-        field: F,
-        validator: V,
-        message: &'static str,
-    ) -> Self {
+    pub fn with_custom<V: Validator + 'static>(mut self, field: F, validator: V) -> Self {
         self.validations.push(FieldValidator {
             fields: vec![field].into_iter().collect(),
             validator: Box::new(validator),
-            error_message: Some(message),
+            error_message: None,
         });
         self
     }

@@ -1,10 +1,11 @@
 use super::label::Label;
+use crate::forms::FormField;
 use std::{collections::HashMap, rc::Rc};
 use yew::prelude::*;
 
 pub struct Field<T>
 where
-    T: Copy + std::hash::Hash + Eq + PartialEq + std::fmt::Debug + 'static,
+    T: FormField,
 {
     props: Props<T>,
 }
@@ -12,7 +13,7 @@ where
 #[derive(Clone, Properties)]
 pub struct Props<T>
 where
-    T: Copy + std::hash::Hash + Eq + PartialEq + std::fmt::Debug + 'static,
+    T: FormField,
 {
     pub field: T,
     pub errors: Option<Rc<HashMap<T, Vec<Rc<Html>>>>>,
@@ -26,7 +27,7 @@ where
 
 impl<T> Component for Field<T>
 where
-    T: Copy + std::hash::Hash + Eq + PartialEq + std::fmt::Debug + 'static,
+    T: FormField,
 {
     type Message = ();
     type Properties = Props<T>;
@@ -41,7 +42,7 @@ where
 
     fn view(&self) -> Html {
         let label = if !self.props.label.is_empty() {
-            html! {<Label text=self.props.label.clone()/>}
+            html! {<Label<T> text=self.props.label.clone() field=self.props.field />}
         } else {
             html! {}
         };

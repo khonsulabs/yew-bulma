@@ -1,11 +1,12 @@
 use super::storage::FormStorage;
+use crate::forms::FormField;
 use std::collections::HashMap;
 use std::rc::Rc;
 use yew::prelude::*;
 
 pub struct Radio<T, V>
 where
-    T: Copy + std::hash::Hash + Eq + PartialEq + std::fmt::Debug + 'static,
+    T: FormField,
     V: Default + std::fmt::Debug + Copy + Eq + 'static,
 {
     props: Props<T, V>,
@@ -15,7 +16,7 @@ where
 #[derive(Clone, Properties)]
 pub struct Props<T, V>
 where
-    T: Copy + std::hash::Hash + Eq + PartialEq + std::fmt::Debug + 'static,
+    T: FormField,
     V: Default + std::fmt::Debug + Copy + Eq + 'static,
 {
     #[prop_or_default]
@@ -39,7 +40,7 @@ where
 
 impl<T, V> Component for Radio<T, V>
 where
-    T: Copy + std::hash::Hash + Eq + PartialEq + std::fmt::Debug + 'static,
+    T: FormField,
     V: Default + std::fmt::Debug + Copy + Eq + 'static,
 {
     type Message = Message<V>;
@@ -87,7 +88,7 @@ where
 
 impl<T, V> Radio<T, V>
 where
-    T: Copy + std::hash::Hash + Eq + PartialEq + std::fmt::Debug + 'static,
+    T: FormField,
     V: Default + std::fmt::Debug + Copy + Eq + 'static,
 {
     fn render_option(&self, label: &str, value: V) -> Html {
@@ -97,6 +98,5 @@ where
                 { label }
             </label>
         }
-        //  <input class=css_class ref=self.input.clone() type="text" value=self.props.storage.borrow() placeholder=&self.props.placeholder onchange=self.link.callback(|_| Message::KeyPressed) oninput=self.link.callback(|_| Message::KeyPressed) disabled=self.props.disabled readonly=self.props.readonly />
     }
 }

@@ -1,11 +1,15 @@
-use super::storage::FormStorage;
 use std::{collections::HashMap, rc::Rc, str::FromStr};
+
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
 
+use crate::forms::FormField;
+
+use super::storage::FormStorage;
+
 pub struct TextInput<T, V>
 where
-    T: Copy + std::hash::Hash + Eq + PartialEq + std::fmt::Debug + 'static,
+    T: FormField,
     V: Clone + FromStr + ToString + std::fmt::Debug + PartialEq + 'static,
 {
     props: Props<T, V>,
@@ -17,7 +21,7 @@ where
 #[derive(Clone, Properties)]
 pub struct Props<T, V>
 where
-    T: Copy + std::hash::Hash + Eq + PartialEq + std::fmt::Debug + 'static,
+    T: FormField,
     V: Clone + FromStr + ToString + std::fmt::Debug + PartialEq + 'static,
 {
     #[prop_or_default]
@@ -31,6 +35,8 @@ where
     pub disabled: bool,
     #[prop_or_default]
     pub readonly: bool,
+    #[prop_or_default]
+    pub autofocus: bool,
 }
 
 pub enum Message {
@@ -39,7 +45,7 @@ pub enum Message {
 
 impl<T, V> Component for TextInput<T, V>
 where
-    T: Copy + std::hash::Hash + Eq + PartialEq + std::fmt::Debug + 'static,
+    T: FormField,
     V: Clone + FromStr + ToString + std::fmt::Debug + PartialEq + 'static,
 {
     type Message = Message;
@@ -102,10 +108,21 @@ where
         };
         html! {
             <div class="control">
-                <input class=css_class ref=self.input.clone() type="text" value=self.text_value placeholder=&self.props.placeholder onchange=self.link.callback(|_| Message::KeyPressed) oninput=self.link.callback(|_| Message::KeyPressed) disabled=self.props.disabled readonly=self.props.readonly />
+                <input
+                    id=self.props.field.form_id()
+                    class=css_class
+                    ref=self.input.clone()
+                    type="text"
+                    value=self.text_value
+                    placeholder=&self.props.placeholder
+                    onchange=self.link.callback(|_| Message::KeyPressed)
+                    oninput=self.link.callback(|_| Message::KeyPressed)
+                    disabled=self.props.disabled
+                    readonly=self.props.readonly />
             </div>
         }
     }
+
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
         self.text_value = props
             .storage
@@ -114,5 +131,13 @@ where
             .unwrap_or_default();
         self.props = props;
         true
+    }
+
+    fn rendered(&mut self, first_render: bool) {
+        if first_render && self.props.autofocus {
+            if let Some(input) = self.input.cast::<HtmlInputElement>() {
+                let _ = input.focus();
+            }
+        }
     }
 }

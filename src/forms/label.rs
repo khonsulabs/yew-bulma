@@ -1,17 +1,29 @@
 use yew::prelude::*;
 
-pub struct Label {
-    props: Props,
+use crate::forms::FormField;
+
+pub struct Label<T>
+where
+    T: FormField,
+{
+    props: Props<T>,
 }
 
 #[derive(Clone, Properties)]
-pub struct Props {
+pub struct Props<T>
+where
+    T: FormField,
+{
     pub text: String,
+    pub field: T,
 }
 
-impl Component for Label {
+impl<T> Component for Label<T>
+where
+    T: FormField,
+{
     type Message = ();
-    type Properties = Props;
+    type Properties = Props<T>;
 
     fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
         Self { props }
@@ -28,7 +40,7 @@ impl Component for Label {
 
     fn view(&self) -> Html {
         html! {
-            <label class="label">{ &self.props.text }</label>
+            <label class="label" for=self.props.field.form_id()>{ &self.props.text }</label>
         }
     }
 }
